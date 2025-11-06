@@ -462,10 +462,10 @@ SUPPORT_GROUP = "https://t.me/ZiddiSupport"
 
 @app.on_callback_query(filters.regex("show_groups"))
 async def show_groups(_, query: CallbackQuery):
-    caption = "<b>📜 Official Groups List:</b>\n\n"
+    caption = "📜 Official Groups List:\n\n"
     for g in GROUP_LIST:
-        caption += f"• <a href='{g['url']}'>{g['name']}</a>\n"
-    caption += "\n✨ <i>Join our groups and be part of the community!</i>"
+        caption += f"• {g['name']} → {g['url']}\n"
+    caption += "\n✨ Join our groups and be part of the community!"
     
     buttons = [
         [InlineKeyboardButton("💬 Support Group", url=SUPPORT_GROUP)],
@@ -476,16 +476,15 @@ async def show_groups(_, query: CallbackQuery):
         photo=GROUP_IMAGE,
         caption=caption,
         reply_markup=InlineKeyboardMarkup(buttons),
-        parse_mode="html",
     )
 
 
 @app.on_callback_query(filters.regex("show_channels"))
 async def show_channels(_, query: CallbackQuery):
-    caption = "<b>📺 Official Channels List:</b>\n\n"
+    caption = "📺 Official Channels List:\n\n"
     for c in CHANNEL_LIST:
-        caption += f"• <a href='{c['url']}'>{c['name']}</a>\n"
-    caption += "\n🚀 <i>Stay tuned for the latest updates!</i>"
+        caption += f"• {c['name']} → {c['url']}\n"
+    caption += "\n🚀 Stay tuned for the latest updates!"
     
     buttons = [
         [InlineKeyboardButton("💬 Support Group", url=SUPPORT_GROUP)],
@@ -496,7 +495,6 @@ async def show_channels(_, query: CallbackQuery):
         photo=CHANNEL_IMAGE,
         caption=caption,
         reply_markup=InlineKeyboardMarkup(buttons),
-        parse_mode="html",
     )
 
 
@@ -514,5 +512,4 @@ async def back_to_main(_, query: CallbackQuery):
     await query.message.edit_text(
         "👋 Back to main menu:",
         reply_markup=InlineKeyboardMarkup(buttons),
-        disable_web_page_preview=True,
     )

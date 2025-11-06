@@ -1,6 +1,6 @@
 import asyncio
 from pyrogram import filters
-from pyrogram.types import CallbackQuery, InlineKeyboardButton, InlineKeyboardMarkup
+from pyrogram.types import CallbackQuery, InlineKeyboardButton, InlineKeyboardMarkup, InputMediaPhoto
 
 from BrandrdXMusic import YouTube, app
 from BrandrdXMusic.core.call import Hotty
@@ -441,9 +441,6 @@ async def markup_timer():
 asyncio.create_task(markup_timer())
 
 
-from pyrogram import filters
-from pyrogram.types import CallbackQuery, InlineKeyboardButton, InlineKeyboardMarkup, InputMediaPhoto
-from BrandrdXMusic import app
 
 # --- Custom Image Links ---
 GROUP_IMAGE = "https://files.catbox.moe/3zc6ro.jpg"

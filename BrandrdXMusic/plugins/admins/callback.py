@@ -441,68 +441,79 @@ async def markup_timer():
 asyncio.create_task(markup_timer())
 
 
-from pyrogram import filters
-from pyrogram.types import CallbackQuery, InlineKeyboardButton, InlineKeyboardMarkup
-from BrandrdXMusic import app
-
+# ======================================================
+# 📸 Groups / Channels Caption List (Image + Links + Buttons)
+# ======================================================
 # --- Custom Image Links ---
 GROUP_IMAGE = "https://files.catbox.moe/3zc6ro.jpg"
 CHANNEL_IMAGE = "https://files.catbox.moe/3zc6ro.jpg"
 
-# --- Support Link ---
+# --- Apne Links ---
+GROUP_LIST = [
+    {"name": "🎧 <b>ZIDDI × MUSIC</b>", "url": "https://t.me/ZiddiMusicGroup"},
+    {"name": "💬 <b>Music Lovers</b>", "url": "https://t.me/MusicLoversChat"},
+]
+CHANNEL_LIST = [
+    {"name": "📢 <b>ZIDDI Updates</b>", "url": "https://t.me/ZiddiUpdates"},
+    {"name": "🎶 <b>ZIDDI Support</b>", "url": "https://t.me/ZiddiSupport"},
+]
 SUPPORT_GROUP = "https://t.me/ZiddiSupport"
 
 
-# ✅ GROUPS SECTION
 @app.on_callback_query(filters.regex("show_groups"))
 async def show_groups(_, query: CallbackQuery):
-    caption = (
-        "🎧 <b><u>Premium Official Groups</u></b>\n\n"
-        "✨ <b>•</b> <a href='https://t.me/ZiddiMusicGroup'>🎵 𝗭𝗜𝗗𝗗𝗜 × 𝗠𝗨𝗦𝗜𝗖</a>\n"
-        "💬 <b>•</b> <a href='https://t.me/MusicLoversChat'>💫 𝗠𝘂𝘀𝗶𝗰 𝗟𝗼𝘃𝗲𝗿𝘀</a>\n\n"
-        "<i>🌟 Join our community and vibe with us!</i>"
-    )
+    caption = "<b>📜 Official Groups List:</b>\n\n"
+    for g in GROUP_LIST:
+        caption += f"• <a href='{g['url']}'>{g['name']}</a>\n"
+    caption += "\n✨ <i>Join our groups and be part of the community!</i>"
 
-    buttons = InlineKeyboardMarkup([
+    buttons = [
         [InlineKeyboardButton("💬 Support Group", url=SUPPORT_GROUP)],
-        [InlineKeyboardButton("❌ Close", callback_data="close_message")]
-    ])
+        [InlineKeyboardButton("⬅️ Back", callback_data="back_to_main")],
+    ]
 
     await query.message.reply_photo(
         photo=GROUP_IMAGE,
         caption=caption,
+        reply_markup=InlineKeyboardMarkup(buttons),
         parse_mode="html",
-        reply_markup=buttons
     )
 
 
-# ✅ CHANNELS SECTION
 @app.on_callback_query(filters.regex("show_channels"))
 async def show_channels(_, query: CallbackQuery):
-    caption = (
-        "📺 <b><u>Premium Official Channels</u></b>\n\n"
-        "📢 <b>•</b> <a href='https://t.me/ZiddiUpdates'>🔥 𝗭𝗜𝗗𝗗𝗜 𝗨𝗽𝗱𝗮𝘁𝗲𝘀</a>\n"
-        "🎶 <b>•</b> <a href='https://t.me/ZiddiSupport'>💎 𝗭𝗜𝗗𝗗𝗜 𝗦𝘂𝗽𝗽𝗼𝗿𝘁</a>\n\n"
-        "<i>🚀 Stay tuned for exclusive updates!</i>"
-    )
+    caption = "<b>📺 Official Channels List:</b>\n\n"
+    for c in CHANNEL_LIST:
+        caption += f"• <a href='{c['url']}'>{c['name']}</a>\n"
+    caption += "\n🚀 <i>Stay tuned for the latest updates!</i>"
 
-    buttons = InlineKeyboardMarkup([
+    buttons = [
         [InlineKeyboardButton("💬 Support Group", url=SUPPORT_GROUP)],
-        [InlineKeyboardButton("❌ Close", callback_data="close_message")]
-    ])
+        [InlineKeyboardButton("⬅️ Back", callback_data="back_to_main")],
+    ]
 
     await query.message.reply_photo(
         photo=CHANNEL_IMAGE,
         caption=caption,
+        reply_markup=InlineKeyboardMarkup(buttons),
         parse_mode="html",
-        reply_markup=buttons
     )
 
 
-# ✅ CLOSE BUTTON
-@app.on_callback_query(filters.regex("close_message"))
-async def close_message(_, query: CallbackQuery):
-    try:
-        await query.message.delete()
-    except:
-        pass
+@app.on_callback_query(filters.regex("back_to_main"))
+async def back_to_main(_, query: CallbackQuery):
+    from BrandrdXMusic.utils.inline.start import private_panel
+    buttons = private_panel({
+        "S_B_1": "Add Me",
+        "S_B_2": "Support",
+        "S_B_3": "Start",
+        "S_B_4": "Help",
+        "S_B_5": "Owner",
+        "S_B_6": "Channel"
+    })
+    await query.message.edit_text(
+        "<b>👋 Back to main menu:</b>",
+        reply_markup=InlineKeyboardMarkup(buttons),
+        parse_mode="html",
+        disable_web_page_preview=True,
+    )

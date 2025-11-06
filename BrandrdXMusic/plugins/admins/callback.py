@@ -441,60 +441,27 @@ async def markup_timer():
 asyncio.create_task(markup_timer())
 
 
-
-# --- Custom Image Links ---
 GROUP_IMAGE = "https://files.catbox.moe/3zc6ro.jpg"
 CHANNEL_IMAGE = "https://files.catbox.moe/3zc6ro.jpg"
-
-# --- Apne Links ---
-GROUP_LIST = [
-    {"name": "🎧 ZIDDI × MUSIC", "url": "https://t.me/ZiddiMusicGroup"},
-    {"name": "💬 Music Lovers", "url": "https://t.me/MusicLoversChat"},
-]
-CHANNEL_LIST = [
-    {"name": "📢 ZIDDI Updates", "url": "https://t.me/ZiddiUpdates"},
-    {"name": "🎶 ZIDDI Support", "url": "https://t.me/ZiddiSupport"},
-]
 SUPPORT_GROUP = "https://t.me/ZiddiSupport"
 
 
+# ✅ Groups list button
 @app.on_callback_query(filters.regex("show_groups"))
 async def show_groups(_, query: CallbackQuery):
-    caption = "<b>📜 Official Groups List:</b>\n\n"
-    for g in GROUP_LIST:
-        caption += f"• <a href='{g['url']}'>{g['name']}</a>\n"
-    caption += "\n✨ <i>Join our groups and be part of the community!</i>"
-    
-    buttons = [
-        [InlineKeyboardButton("💬 Support Group", url=SUPPORT_GROUP)],
-        [InlineKeyboardButton("⬅️ Back", callback_data="back_to_main")],
-    ]
-    
-    await query.message.edit_media(
-        media=InputMediaPhoto(
-            media=GROUP_IMAGE,
-            caption=caption,
-            parse_mode="html",  # ✅ Enable clickable name format
-        ),
-        reply_markup=InlineKeyboardMarkup(buttons),
+    caption = (
+        "📜 <b>Official Groups List:</b>\n\n"
+        "• 🎧 <a href='https://t.me/ZiddiMusicGroup'>ZIDDI × MUSIC</a>\n"
+        "• 💬 <a href='https://t.me/MusicLoversChat'>Music Lovers</a>\n\n"
+        "✨ Join our groups and be part of the community!"
     )
-
-
-@app.on_callback_query(filters.regex("show_channels"))
-async def show_channels(_, query: CallbackQuery):
-    caption = "<b>📺 Official Channels List:</b>\n\n"
-    for c in CHANNEL_LIST:
-        caption += f"• <a href='{c['url']}'>{c['name']}</a>\n"
-    caption += "\n🚀 <i>Stay tuned for the latest updates!</i>"
-    
     buttons = [
         [InlineKeyboardButton("💬 Support Group", url=SUPPORT_GROUP)],
         [InlineKeyboardButton("⬅️ Back", callback_data="back_to_main")],
     ]
-    
     await query.message.edit_media(
         media=InputMediaPhoto(
-            media=CHANNEL_IMAGE,
+            GROUP_IMAGE,
             caption=caption,
             parse_mode="html",
         ),
@@ -502,6 +469,30 @@ async def show_channels(_, query: CallbackQuery):
     )
 
 
+# ✅ Channels list button
+@app.on_callback_query(filters.regex("show_channels"))
+async def show_channels(_, query: CallbackQuery):
+    caption = (
+        "📺 <b>Official Channels List:</b>\n\n"
+        "• 📢 <a href='https://t.me/ZiddiUpdates'>ZIDDI Updates</a>\n"
+        "• 🎶 <a href='https://t.me/ZiddiSupport'>ZIDDI Support</a>\n\n"
+        "🚀 Stay tuned for the latest updates!"
+    )
+    buttons = [
+        [InlineKeyboardButton("💬 Support Group", url=SUPPORT_GROUP)],
+        [InlineKeyboardButton("⬅️ Back", callback_data="back_to_main")],
+    ]
+    await query.message.edit_media(
+        media=InputMediaPhoto(
+            CHANNEL_IMAGE,
+            caption=caption,
+            parse_mode="html",
+        ),
+        reply_markup=InlineKeyboardMarkup(buttons),
+    )
+
+
+# ✅ Back button (to main menu)
 @app.on_callback_query(filters.regex("back_to_main"))
 async def back_to_main(_, query: CallbackQuery):
     from BrandrdXMusic.utils.inline.start import private_panel
@@ -514,7 +505,7 @@ async def back_to_main(_, query: CallbackQuery):
         "S_B_6": "Channel"
     })
     await query.message.edit_caption(
-        caption="<b>👋 Back to main menu:</b>",
+        caption="👋 <b>Back to main menu:</b>",
         reply_markup=InlineKeyboardMarkup(buttons),
         parse_mode="html",
     )

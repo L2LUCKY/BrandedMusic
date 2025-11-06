@@ -440,3 +440,79 @@ async def markup_timer():
 
 
 asyncio.create_task(markup_timer())
+
+
+
+# ======================================================
+# 📸 Groups / Channels Caption List (Image + Links + Buttons)
+# ======================================================
+
+from pyrogram.types import CallbackQuery,
+
+# --- Custom Image Links ---
+GROUP_IMAGE = "https://files.catbox.moe/3zc6ro.jpg"
+CHANNEL_IMAGE = "https://files.catbox.moe/3zc6ro.jpg"
+
+# --- Apne Links ---
+GROUP_LIST = [
+    {"name": "🎧 ZIDDI × MUSIC", "url": "https://t.me/ZiddiMusicGroup"},
+    {"name": "💬 Music Lovers", "url": "https://t.me/MusicLoversChat"},
+]
+CHANNEL_LIST = [
+    {"name": "📢 ZIDDI Updates", "url": "https://t.me/ZiddiUpdates"},
+    {"name": "🎶 ZIDDI Support", "url": "https://t.me/ZiddiSupport"},
+]
+SUPPORT_GROUP = "https://t.me/ZiddiSupport"
+
+@app.on_callback_query(filters.regex("show_groups"))
+async def show_groups(_, query: CallbackQuery):
+    caption = "📜 **Official Groups List:**\n\n"
+    for g in GROUP_LIST:
+        caption += f"• [{g['name']}]({g['url']})\n"
+    caption += "\n✨ *Join our groups and be part of the community!*"
+    buttons = [
+        [InlineKeyboardButton("💬 Support Group", url=SUPPORT_GROUP)],
+        [InlineKeyboardButton("⬅️ Back", callback_data="back_to_main")],
+    ]
+    await query.message.reply_photo(
+        photo=GROUP_IMAGE,
+        caption=caption,
+        reply_markup=InlineKeyboardMarkup(buttons),
+        parse_mode="markdown",
+        disable_web_page_preview=True,
+    )
+
+@app.on_callback_query(filters.regex("show_channels"))
+async def show_channels(_, query: CallbackQuery):
+    caption = "📺 **Official Channels List:**\n\n"
+    for c in CHANNEL_LIST:
+        caption += f"• [{c['name']}]({c['url']})\n"
+    caption += "\n🚀 *Stay tuned for the latest updates!*"
+    buttons = [
+        [InlineKeyboardButton("💬 Support Group", url=SUPPORT_GROUP)],
+        [InlineKeyboardButton("⬅️ Back", callback_data="back_to_main")],
+    ]
+    await query.message.reply_photo(
+        photo=CHANNEL_IMAGE,
+        caption=caption,
+        reply_markup=InlineKeyboardMarkup(buttons),
+        parse_mode="markdown",
+        disable_web_page_preview=True,
+    )
+
+@app.on_callback_query(filters.regex("back_to_main"))
+async def back_to_main(_, query: CallbackQuery):
+    from BrandrdXMusic.utils.inline.start import private_panel
+    buttons = private_panel({
+        "S_B_1": "Add Me",
+        "S_B_2": "Support",
+        "S_B_3": "Start",
+        "S_B_4": "Help",
+        "S_B_5": "Owner",
+        "S_B_6": "Channel"
+    })
+    await query.message.edit_text(
+        "👋 Back to main menu:",
+        reply_markup=InlineKeyboardMarkup(buttons),
+        disable_web_page_preview=True,
+    )
